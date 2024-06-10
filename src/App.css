@@ -1,0 +1,39 @@
+input {
+    text-align: end;
+    width: 145pt;
+    height: 15pt
+}
+
+#deleteButton {
+    width: 100pt;
+    background-color: red;
+}
+
+button {
+    width: 50pt;
+    height: 50pt;
+    background-color: #666666;
+    cursor: pointer;
+    font-size: 14pt;
+}
+
+button:hover {
+    background-color: #4D4D4D;
+}
+
+#buttons {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 200pt;
+}
+
+#zeroButton {
+    width: 100pt;
+}
+
+#equalsButton {
+    width: 100pt;
+}
