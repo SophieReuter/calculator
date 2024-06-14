@@ -1,10 +1,19 @@
+
 input {
     text-align: end;
     width: 145pt;
     height: 15pt
 }
 
-#deleteButton {
+.upper {
+    width: 198pt;
+    text-align: end;
+    font-size: 25pt;
+    letter-spacing: 3px;
+    min-height: 30pt;
+}
+
+#clear {
     width: 100pt;
     background-color: red;
 }
@@ -30,10 +39,19 @@ button:hover {
     width: 200pt;
 }
 
-#zeroButton {
+#zero {
     width: 100pt;
 }
 
-#equalsButton {
+#equals {
     width: 100pt;
+    background-color: blue;
+}
+
+#equals:hover {
+    background-color: darkblue;
+}
+
+#clear:hover {
+    background-color: darkred;
 }
