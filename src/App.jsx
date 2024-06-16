@@ -52,55 +52,35 @@ function App() {
     for (let i = 0; i <= calculation.length - 1; i++) {
       const currentValue = calculation[i];
       if (currentValue === "*" || currentValue === "/") {
-        let firstNumber = 0;
-        let secondNumber = 0;
-        const firstIndex = 0;
-        const lastIndex = 0;
+        const firstNumber = parseFloat(calculation[i - 1]);
+        const secondNumber = parseFloat(calculation[i + 1]);
         let result = 0;
-        for (let x = i - 1; x >= 0; x--) {
-          if (isOperator(x)) {
-            firstIndex = x + 1;
-            break;
-          } else {
-            firstNumber = calculation[x] + firstNumber;
-          }
-        }
-        firstNumber = parseFloat(firstNumber);
-        for (let x = i + 1; x <= calculation.length - 1; x++) {
-          if (isOperator(x)) {
-            lastIndex = x - 1;
-            break;
-          } else {
-            secondNumber = secondNumber + calculation[x];
-          }
-        }
-        secondNumber = parseFloat(secondNumber);
         switch (currentValue) {
           case "*":
-            result = firstNumber * secondNumber;
+            result = String(firstNumber * secondNumber);
             break;
           case "/":
-            result = firstNumber / secondNumber;
+            result = String(firstNumber / secondNumber);
             break;
         }
-        pushToArray((prev) => {
-          [...prev, result];
-        });
-        calculation = calculation.splice(firstIndex, lastIndex - 1);
+        const newArray = calculation.map();
+        pushToArray(newArray);
         console.log(calculation);
+        /*if (currentChar === "/" && input == "0") {
+          //dadurch geht nicht durch 0.5
+          alert("It is not possible to divide by zero!");
+          deleteCalculation();
+          return;
+        } else */
       }
     }
   };
 
   const addInput = (input) => {
-    debugger;
+    //debugger;
     const lastChar = calculation[calculation.length - 1];
-    if (currentChar === "/" && input == "0") {
-      alert("It is not possible to divide by zero!");
-      deleteCalculation();
-      return;
-    } else if (
-      (lastChar === "0" && !specialCharacters.includes(input)) || //Fehler weil 300 oder 303 nicht möglich
+    if (
+      (lastChar === "0" && !specialCharacters.includes(input)) ||
       (isSpecialCharacter(input) && isSpecialCharacter(lastChar))
     )
       return;
@@ -110,7 +90,7 @@ function App() {
         !isOperator(input) &&
         lastChar !== undefined
       ) {
-        const newNumber = String(parseFloat(lastChar + input));
+        const newNumber = lastChar + input;
         const updatedArray = calculation.map((value, index) => {
           if (index === calculation.length - 1) {
             return newNumber;
