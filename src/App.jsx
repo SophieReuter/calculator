@@ -43,39 +43,6 @@ function App() {
     pushToArray([]);
   };
 
-  const calculateResult = () => {
-    if (isSpecialCharacter(calculation[calculation.length - 1])) {
-      alert("Every calculation needs to end with a numeric value!");
-      deleteCalculation();
-      return;
-    }
-    for (let i = 0; i <= calculation.length - 1; i++) {
-      const currentValue = calculation[i];
-      if (currentValue === "*" || currentValue === "/") {
-        const firstNumber = parseFloat(calculation[i - 1]);
-        const secondNumber = parseFloat(calculation[i + 1]);
-        let result = 0;
-        switch (currentValue) {
-          case "*":
-            result = String(firstNumber * secondNumber);
-            break;
-          case "/":
-            result = String(firstNumber / secondNumber);
-            break;
-        }
-        const newArray = calculation.map();
-        pushToArray(newArray);
-        console.log(calculation);
-        /*if (currentChar === "/" && input == "0") {
-          //dadurch geht nicht durch 0.5
-          alert("It is not possible to divide by zero!");
-          deleteCalculation();
-          return;
-        } else */
-      }
-    }
-  };
-
   const addInput = (input) => {
     //debugger;
     const lastChar = calculation[calculation.length - 1];
@@ -122,6 +89,62 @@ function App() {
       </button>
     );
   }
+
+  const calculateResult = () => {
+    setDisplay((prev) => prev + "=");
+    debugger;
+    if (isSpecialCharacter(calculation[calculation.length - 1])) {
+      alert("Every calculation needs to end with a numeric value!");
+      deleteCalculation();
+      return;
+    }
+    for (let i = 0; i <= calculation.length - 1; i++) {
+      const currentValue = calculation[i];
+      if (currentValue === "/" && calculation[i + 1] == "0") {
+        alert("It is not possible to divide by zero!");
+        deleteCalculation();
+        return;
+      }
+      if (currentValue === "*" || currentValue === "/") {
+        const firstNumber = parseFloat(calculation[i - 1]);
+        const secondNumber = parseFloat(calculation[i + 1]);
+        let result = "";
+        switch (currentValue) {
+          case "*":
+            result = String(firstNumber * secondNumber);
+            break;
+          case "/":
+            result = String(firstNumber / secondNumber);
+            break;
+        }
+        const newArray = calculation.splice(i - 1, 3, result);
+        pushToArray(newArray);
+        i = 0;
+      }
+    }
+    for (let i = 0; i <= calculation.length - 1; i++) {
+      const currentValue = calculation[i];
+      if (currentValue === "+" || currentValue === "-") {
+        const firstNumber = parseFloat(calculation[i - 1]);
+        const secondNumber = parseFloat(calculation[i + 1]);
+        let result = "";
+        switch (currentValue) {
+          case "+":
+            result = String(firstNumber + secondNumber);
+            break;
+          case "-":
+            result = String(firstNumber - secondNumber);
+            break;
+        }
+        const newArray = calculation.splice(i - 1, 3, result);
+        pushToArray(newArray);
+        i = 0;
+      }
+    }
+    console.log(calculation);
+    setChar(calculation);
+    setDisplay((prev) => prev + calculation);
+  };
 
   return (
     <>
