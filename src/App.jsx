@@ -33,8 +33,8 @@ function App() {
     return operators.includes(value);
   };
 
-  const isSpecialCharacter = (value) => {
-    return specialCharacters.includes(value);
+  const isNumber = (value) => {
+    return !specialCharacters.includes(value);
   };
 
   const deleteCalculation = () => {
@@ -44,34 +44,27 @@ function App() {
   };
 
   const addInput = (input) => {
-    //debugger;
+    debugger;
     const lastChar = calculation[calculation.length - 1];
     if (
-      (lastChar === "0" && !specialCharacters.includes(input)) ||
-      (isSpecialCharacter(input) && isSpecialCharacter(lastChar))
+      (lastChar === "0" && isNumber(input)) ||
+      (!isNumber(input) && !isNumber(lastChar))
     )
       return;
-    else {
-      if (
-        !isOperator(lastChar) &&
-        !isOperator(input) &&
-        lastChar !== undefined
-      ) {
-        const newNumber = lastChar + input;
-        const updatedArray = calculation.map((value, index) => {
-          if (index === calculation.length - 1) {
-            return newNumber;
-          }
-        });
-        setDisplay((prev) => prev + input);
-        pushToArray((prev) => updatedArray);
-        setChar((prev) => newNumber);
+    if (
+      !isOperator(lastChar) &&
+      !isOperator(input) &&
+      lastChar !== undefined
+    ) {
+      const newNumber = lastChar + input;
+      calculation[calculation.length-1] = newNumber;
+      setDisplay((prev) => prev + input);
+      setChar((prev) => newNumber);
       } else {
         setDisplay((prev) => prev + input);
         pushToArray((prev) => [...prev, input]);
         setChar((prev) => input);
       }
-    }
   };
 
   for (let value of chars) {
@@ -93,7 +86,7 @@ function App() {
   const calculateResult = () => {
     setDisplay((prev) => prev + "=");
     debugger;
-    if (isSpecialCharacter(calculation[calculation.length - 1])) {
+    if (!isNumber(calculation[calculation.length - 1])) {
       alert("Every calculation needs to end with a numeric value!");
       deleteCalculation();
       return;
@@ -148,6 +141,7 @@ function App() {
 
   return (
     <>
+      <h1 id="headline">Calculator</h1>
       <div className="upper" id="input">
         {display}
       </div>
