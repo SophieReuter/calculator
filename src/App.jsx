@@ -44,27 +44,22 @@ function App() {
   };
 
   const addInput = (input) => {
-    debugger;
+    //debugger;
     const lastChar = calculation[calculation.length - 1];
+    if (lastChar === "0" && isNumber(input)) return;
     if (
-      (lastChar === "0" && isNumber(input)) ||
-      (!isNumber(input) && !isNumber(lastChar))
-    )
-      return;
-    if (
-      !isOperator(lastChar) &&
-      !isOperator(input) &&
-      lastChar !== undefined
+      (!isOperator(lastChar) && !isOperator(input) && lastChar !== undefined) ||
+      (lastChar === "-" && !isOperator(input))
     ) {
       const newNumber = lastChar + input;
-      calculation[calculation.length-1] = newNumber;
+      calculation[calculation.length - 1] = newNumber;
       setDisplay((prev) => prev + input);
       setChar((prev) => newNumber);
-      } else {
-        setDisplay((prev) => prev + input);
-        pushToArray((prev) => [...prev, input]);
-        setChar((prev) => input);
-      }
+    } else {
+      setDisplay((prev) => prev + input);
+      pushToArray((prev) => [...prev, input]);
+      setChar((prev) => input);
+    }
   };
 
   for (let value of chars) {
