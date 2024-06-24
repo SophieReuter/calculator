@@ -105,7 +105,8 @@ function App() {
             result = String(firstNumber / secondNumber);
             break;
         }
-        const newArray = calculation.splice(i - 1, 3, result);
+        const newArray = calculation;
+        newArray.splice(i - 1, 3, result);
         pushToArray(newArray);
         i = 0;
       }
