@@ -4,7 +4,7 @@ import "./App.css";
 function App() {
   const [display, setDisplay] = useState("");
   const [currentChar, setChar] = useState("");
-  const [calculation, pushToArray] = useState([]);
+  const [calculation, setCalculation] = useState([]);
 
   const chars = [
     { id: "divide", char: "/" },
@@ -40,25 +40,32 @@ function App() {
   const deleteCalculation = () => {
     setDisplay("");
     setChar("");
-    pushToArray([]);
+    setCalculation([]);
   };
 
   const addInput = (input) => {
     //debugger;
     const lastChar = calculation[calculation.length - 1];
+    const secondLastChar = calculation[calculation.length - 2];
     if (lastChar === "0" && isNumber(input)) return;
     if (
       (!isOperator(lastChar) && !isOperator(input) && lastChar !== undefined) ||
-      (lastChar === "-" && !isOperator(input))
+      (lastChar === "-" &&
+        !isOperator(input) &&
+        (!isNumber(secondLastChar) || secondLastChar == undefined))
     ) {
       const newNumber = lastChar + input;
-      calculation[calculation.length - 1] = newNumber;
+      setCalculation((prev) => {
+        const newArray = [...prev];
+        newArray[newArray.length - 1] = newNumber;
+        return newArray;
+      });
       setDisplay((prev) => prev + input);
-      setChar((prev) => newNumber);
+      setChar(newNumber);
     } else {
       setDisplay((prev) => prev + input);
-      pushToArray((prev) => [...prev, input]);
-      setChar((prev) => input);
+      setCalculation((prev) => [...prev, input]);
+      setChar(input);
     }
   };
 
@@ -79,23 +86,24 @@ function App() {
   }
 
   const calculateResult = () => {
+    const newArray = [...calculation];
     setDisplay((prev) => prev + "=");
     debugger;
-    if (!isNumber(calculation[calculation.length - 1])) {
+    if (!isNumber(newArray[newArray.length - 1])) {
       alert("Every calculation needs to end with a numeric value!");
       deleteCalculation();
       return;
     }
-    for (let i = 0; i <= calculation.length - 1; i++) {
-      const currentValue = calculation[i];
-      if (currentValue === "/" && calculation[i + 1] == "0") {
+    for (let i = 0; i <= newArray.length - 1; i++) {
+      const currentValue = newArray[i];
+      if (currentValue === "/" && newArray[i + 1] == "0") {
         alert("It is not possible to divide by zero!");
         deleteCalculation();
         return;
       }
       if (currentValue === "*" || currentValue === "/") {
-        const firstNumber = parseFloat(calculation[i - 1]);
-        const secondNumber = parseFloat(calculation[i + 1]);
+        const firstNumber = parseFloat(newArray[i - 1]);
+        const secondNumber = parseFloat(newArray[i + 1]);
         let result = "";
         switch (currentValue) {
           case "*":
@@ -105,17 +113,15 @@ function App() {
             result = String(firstNumber / secondNumber);
             break;
         }
-        const newArray = calculation;
         newArray.splice(i - 1, 3, result);
-        pushToArray(newArray);
         i = 0;
       }
     }
-    for (let i = 0; i <= calculation.length - 1; i++) {
-      const currentValue = calculation[i];
+    for (let i = 0; i <= newArray.length - 1; i++) {
+      const currentValue = newArray[i];
       if (currentValue === "+" || currentValue === "-") {
-        const firstNumber = parseFloat(calculation[i - 1]);
-        const secondNumber = parseFloat(calculation[i + 1]);
+        const firstNumber = parseFloat(newArray[i - 1]);
+        const secondNumber = parseFloat(newArray[i + 1]);
         let result = "";
         switch (currentValue) {
           case "+":
@@ -125,14 +131,12 @@ function App() {
             result = String(firstNumber - secondNumber);
             break;
         }
-        const newArray = calculation.splice(i - 1, 3, result);
-        pushToArray(newArray);
+        newArray.splice(i - 1, 3, result);
         i = 0;
       }
     }
-    console.log(calculation);
-    setChar(calculation);
-    setDisplay((prev) => prev + calculation);
+    setChar(newArray);
+    setDisplay((prev) => prev + newArray);
   };
 
   return (
