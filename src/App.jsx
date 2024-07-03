@@ -1,4 +1,5 @@
 import { useState } from "react";
+import BigNumber from "bignumber.js";
 import "./App.css";
 
 function App() {
@@ -102,15 +103,15 @@ function App() {
         return;
       }
       if (currentValue === "*" || currentValue === "/") {
-        const firstNumber = parseFloat(newArray[i - 1]);
-        const secondNumber = parseFloat(newArray[i + 1]);
+        const firstNumber = BigNumber(newArray[i - 1]);
+        const secondNumber = BigNumber(newArray[i + 1]);
         let result = "";
         switch (currentValue) {
           case "*":
-            result = String(firstNumber * secondNumber);
+            result = String(firstNumber.multipliedBy(secondNumber));
             break;
           case "/":
-            result = String(firstNumber / secondNumber);
+            result = String(firstNumber.dividedBy(secondNumber));
             break;
         }
         newArray.splice(i - 1, 3, result);
@@ -120,15 +121,15 @@ function App() {
     for (let i = 0; i <= newArray.length - 1; i++) {
       const currentValue = newArray[i];
       if (currentValue === "+" || currentValue === "-") {
-        const firstNumber = parseFloat(newArray[i - 1]);
-        const secondNumber = parseFloat(newArray[i + 1]);
+        const firstNumber = BigNumber(newArray[i - 1]);
+        const secondNumber = BigNumber(newArray[i + 1]);
         let result = "";
         switch (currentValue) {
           case "+":
-            result = String(firstNumber + secondNumber);
+            result = String(firstNumber.plus(secondNumber));
             break;
           case "-":
-            result = String(firstNumber - secondNumber);
+            result = String(firstNumber.minus(secondNumber));
             break;
         }
         newArray.splice(i - 1, 3, result);
